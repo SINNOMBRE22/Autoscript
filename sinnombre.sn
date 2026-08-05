@@ -250,7 +250,7 @@ clear
 echo ""
 ui_top
 ui_titulo "${WHITE}${BOLD}H E X   A U T O   S C R I P T${NC}"
-ui_titulo "${GRIS}instalador  ·  por JotchuaDevz${NC}"
+ui_titulo "${GRIS}instalador  ·  por SinNombre${NC}"
 ui_sep
 ui_fila "${GRIS}Dominio  ${NC} ${WHITE}${DOMAIN:-N/A}${NC}"
 ui_fila "${GRIS}Sistema  ${NC} ${WHITE}${ID:-linux} ${VERSION_ID:-}${NC}   ${GRIS}soporte${NC} ${WHITE}${SUPPORT_LEVEL}${NC}"
@@ -282,78 +282,6 @@ ui_fila "${OKC}✔${NC} ${WHITE}Detectado: ${ID} ${VERSION_ID}${NC} ${GRIS}(${SU
 ui_bot
 sleep 2
 clear
-ofus() {
-unset txtofus
-local str="$1" number=$(expr length "$1") c
-for ((i=1; i<=number; i++)); do
-c=$(echo "$str" | cut -b "$i")
-case "$c" in
-".") c="*";; "*") c=".";;
-"1") c="@";; "@") c="1";;
-"2") c="?";; "?") c="2";;
-"4") c="%";; "%") c="4";;
-"-") c="K";; "K") c="-";;
-esac
-txtofus+="$c"
-done
-echo "$txtofus" | rev
-}
-clear
-echo ""
-titulo_ascii "HEX AUTO"
-echo ""
-ui_top
-ui_titulo "${WHITE}${BOLD}ACTIVACIÓN DE LICENCIA${NC}"
-ui_sep
-ui_fila "${GRIS}Servidor ${NC} ${WHITE}${miip}${NC}"
-ui_fila "${GRIS}Intento  ${NC} ${WHITE}${intentos} de ${max_intentos}${NC}"
-ui_bot
-echo ""
-read -r -p "$(echo -e "  ${YELLOW}KEY${NC} ${GRIS}»${NC} ")" keyuser
-echo ""
-if [[ -z "$keyuser" ]]; then
-echo -e "  ${RED}✘ No ingresaste ninguna key.${NC}"
-else
-prefijo="${keyuser%%/*}"
-resto="${keyuser#*/}"
-if [[ "$prefijo" != "HexGen" || "$resto" == "$keyuser" || -z "$resto" ]]; then
-echo -e "  ${RED}✘ Key con formato inválido.${NC}"
-else
-keyraw="$(ofus "$resto")"
-ip_port="$(echo "$keyraw" | cut -d'/' -f1)"
-valuekey="$(echo "$keyraw" | cut -d'/' -f2)"
-tmpfile="$(mktemp)"
-echo -e "  ${YELLOW}⏳ Verificando key...${NC}"
-wget -q --timeout=10 --tries=1 -O "$tmpfile" \
-"http://${ip_port}/${valuekey}/HexGen/${miip}" 2>/dev/null
-resp="$(tr -d '\r\n' < "$tmpfile" 2>/dev/null)"
-rm -f "$tmpfile" 2>/dev/null
-case "$resp" in
-"HexGen")
-ui_ok "${GREEN} ✅Key válida, continuando...${NC}"
-sleep 1
-break
-;;
-"KEY INVALIDA!")
-echo -e "  ${RED}Key expirada o inválida, por favor genera una nueva.${NC}"
-;;
-"KEY DE GENERADOR!"|"KEY DE HEXGEN!")
-echo -e "  ${YELLOW}Esta key no corresponde a este tipo de instalación.${NC}"
-;;
-*)
-echo -e "  ${RED}✘ No se pudo contactar al servidor de validación.${NC}"
-;;
-esac
-fi
-fi
-read -r -p "$(echo -e "\n  ${CYAN}¿Deseas intentar de nuevo? [s/n]: ${NC}")" reintentar
-[[ "$reintentar" != "s" && "$reintentar" != "S" ]] && {
-echo -e "  ${RED}✘ Instalación cancelada.${NC}"
-exit 1
-}
-done
-}
-validar_key_hextunnel
 clear
 ui_top
 ui_titulo "${WHITE}${BOLD}CONFIGURACIÓN DE DOMINIO${NC}"
@@ -556,7 +484,7 @@ printf 'nameserver %s\nnameserver %s\n' "$Dns_1" "$Dns_2" > /etc/resolv.conf
 ln -fs /usr/share/zoneinfo/$MyVPS_Time /etc/localtime > /dev/null 2>&1
 cat > /root/.profile <<'EOF_PROFILE'
 clear
-echo "Script Por JotchuaDevz"
+echo "Script Por SinNombre"
 echo "Escribe 'menu' Para Ver Los Comandos"
 EOF_PROFILE
 echo iptables-persistent iptables-persistent/autosave_v4 boolean true | debconf-set-selections > /dev/null 2>&1
@@ -3065,7 +2993,7 @@ cpu=$(cpu_percent)
 buf=$(buffer_mem)
 dom="${DOMAIN:-$ip}"
 m_top
-m_titulo "${WHITE}${BOLD}H E X   A U T O${NC}${GRIS}   ·   By JotchuaDevz${NC}"
+m_titulo "${WHITE}${BOLD}H E X   A U T O${NC}${GRIS}   ·   By SinNombre${NC}"
 m_sep
 m_fila "$(printf "${GRIS}%s${NC}${WHITE}%s${NC}${GRIS}%s${NC}${WHITE}%s${NC}${GRIS}%s${NC}${WHITE}%s${NC}" \
 "$(m_pad "SO" 7)" "$(m_pad "$os" 18)" "$(m_pad "ARQ" 6)" "$(m_pad "$arch" 10)" "$(m_pad "CPU" 6)" "$cores")"
